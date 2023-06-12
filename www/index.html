@@ -1,104 +1,123 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
     <script type="text/javascript">
-        let users = {pepe : {username : "pepe", password : "123", mail : "pepe@gmail.com"}, lola : {username : "lola", password : "456", mail : "lola@gmail.com"}};
-        //let users = {{username: "pepe", password : "123", mail : "pepe@gmail.com"},  {username: "lola", password : "456", mail : "lola@gmail.com"}};
+        // Definición de usuarios
+        let users = {
+            pepe: { username: "pepe", password: "123", mail: "pepe@gmail.com" },
+            lola: { username: "lola", password: "456", mail: "lola@gmail.com" }
+        };
 
+        // Función para iniciar sesión
         function fer_login() {
-            console.log("Dins de la funcio");
             let userEl = document.getElementById("userL");
             let passEl = document.getElementById("passL");
 
-            if (users[userEl.value].password == passEl.value) {
-                alert("Logged succesfully as "+userEl.value)
-            }
-            else{
-                alert("Failed")
-                
+            // Validar campos vacíos
+            if (userEl.value.trim() === "" || passEl.value.trim() === "") {
+                alert("Please fill in all fields");
+            } 
+            // Verificar credenciales de usuario
+            else if (users[userEl.value] && users[userEl.value].password === passEl.value) {
+                alert("Logged in successfully as " + userEl.value);
+            } else {
+                alert("Login failed");
             }
         }
-        // S ha de afegir dades al diccionari amb un push, pero primer comprovar
-        //que el camp usuari/contrasenya no estigui ja en el diccionari.
-        //No es pot repetir ni nom ni correu
+
+        // Función para registrar un nuevo usuario
         function registra() {
-            console.log("Dins de la funcio registre");
             let userEl = document.getElementById("userR");
             let passEl = document.getElementById("passR");
             let passEl2 = document.getElementById("passR2");
             let emailEl = document.getElementById("emailR");
             let esta = false;
-            let mail = false
-            if (passEl.value != passEl2.value) {
-                alert("Passwords doesn't match")
+            let mail = false;
+
+            // Validar campos vacíos
+            if (
+                userEl.value.trim() === "" ||
+                passEl.value.trim() === "" ||
+                passEl2.value.trim() === "" ||
+                emailEl.value.trim() === ""
+            ) {
+                alert("Please fill in all fields");
             } 
-            else {
-            //Revisa que no es repeteixi l usuari
+            // Verificar que las contraseñas coincidan
+            else if (passEl.value !== passEl2.value) {
+                alert("Passwords do not match");
+            } else {
+                // Verificar si el usuario ya está registrado
                 for (let i in users) {
-                    if (userEl.value == i){
-                         esta = true;
+                    if (userEl.value === i) {
+                        esta = true;
+                    }
                 }
+
+                if (esta) {
+                    alert("This user is already registered");
+                } else {
+                    // Verificar si el correo ya está en uso
+                    for (let i in users) {
+                        if (users[i].mail === emailEl.value) {
+                            mail = true;
+                        }
+                    }
+
+                    if (mail) {
+                        alert("This email is already used");
+                    } else {
+                        // Registrar nuevo usuario
+                        newUser = {
+                            username: userEl.value,
+                            password: passEl.value,
+                            mail: emailEl.value
+                        };
+                        users[userEl.value] = newUser;
+                        alert("User registered");
+                        console.log(users);
+                    }
                 }
-                if (esta == true){
-                    alert("This user is already registered")
-                }
-                //Revisa que no es repeteixi el correu
-                for (let i in users){
-                    if(users[i].mail == emailEl.value)
-                        mail = true
-                }
-                if (mail==false){
-                    newUser = {username : userEl.value, password : passEl.value, mail : emailEl.value};
-                    users[userEl.value] = newUser;
-                    alert("User registered")
-                    console.log(users)
-                }
-                else
-                    alert("This email is already used")
             }
         }
     </script>
 </head>
 <body>
-<form style="background-color: lightgray;">
-    <h3>Login</h3>
-    <label>Name: </label>
-    <br>
-    <input type="text" name="username" id="userL">
-    <br>
-    <label>Password: </label>
-    <br>
-    <input type="Password" name="password" id="passL">
-    <br>
-    <input type="Button" name="Submit" value="login" onclick="fer_login()">
-</form>
+    <form style="background-color: lightgreen;">
+        <h3>Login</h3>
+        <label>Name: </label>
+        <br>
+        <input type="text" name="username" id="userL">
+        <br>
+        <label>Password: </label>
+        <br>
+        <input type="password" name="password" id="passL">
+        <br>
+        <input type="button" name="Submit" value="Login" onclick="fer_login()">
+    </form>
 
-
-<form style="background-color: lightblue;">
-    <h3>Register</h3>
-    <label>Name: </label>
-    <br>
-    <input type="text" name="username" id="userR">
-    <br>
-    <label>Email: </label>
-    <br>
-    <input type="Email" name="email" id="emailR">
-    <br>
-    <label>Password: </label>
-    <br>
-    <input type="Password" name="password" id="passR">
-    <br>
-    <label>Your Password Again: </label>
-    <br>
-    <input type="Password" name="password" id="passR2">
-    <br>
-    <input type="Button" name="Submit" value="register" onclick="registra()" >
-</form>
-
-
+    <form style="background-color: lightcoral;">
+        <h3>Register</h3>
+        <label>Name: </label>
+        <br>
+        <input type="text" name="username" id="userR">
+        <br>
+        <label>Email: </label>
+        <br>
+        <input type="email" name="email" id="emailR">
+        <br>
+        <label>Password: </label>
+        <br>
+        <input type="password" name="password" id="passR">
+        <br>
+        <label>Your Password Again: </label>
+        <br>
+        <input type="password" name="password" id="passR2">
+        <br>
+        <input type="button" name="Submit" value="Register" onclick="registra()">
+    </form>
 </body>
 </html>
